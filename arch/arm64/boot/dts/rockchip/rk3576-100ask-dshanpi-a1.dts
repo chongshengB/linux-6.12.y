@@ -750,8 +750,11 @@
 	rgmii_phy0: phy@0 {
 		compatible = "ethernet-phy-ieee802.3-c22";
 		reg = <0>;
+		interrupt-parent = <&gpio0>;
+		interrupts = <RK_PC6 IRQ_TYPE_LEVEL_LOW>;
 		pinctrl-names = "default";
-		pinctrl-0 = <&gmac0_rst>;
+		pinctrl-0 = <&gmac0_rst &gmac0_int>;
+		/* Reset time is 20ms, 100ms for yt8521 */
 		reset-assert-us = <20000>;
 		reset-deassert-us = <100000>;
 		reset-gpios = <&gpio0 RK_PC2 GPIO_ACTIVE_LOW>;
@@ -762,8 +765,11 @@
 	rgmii_phy1: phy@0 {
 		compatible = "ethernet-phy-ieee802.3-c22";
 		reg = <0>;
+		interrupt-parent = <&gpio0>;
+		interrupts = <RK_PC7 IRQ_TYPE_LEVEL_LOW>;
 		pinctrl-names = "default";
-		pinctrl-0 = <&gmac1_rst>;
+		pinctrl-0 = <&gmac0_rst &gmac0_int>;
+		/* Reset time is 20ms, 100ms for yt8521 */
 		reset-assert-us = <20000>;
 		reset-deassert-us = <100000>;
 		reset-gpios = <&gpio0 RK_PC5 GPIO_ACTIVE_LOW>;
@@ -780,8 +786,16 @@
 
 &pinctrl {
 	gmac {
+		gmac0_int: gmac0-int {
+			rockchip,pins = <0 RK_PC6 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+
 		gmac0_rst: gmac0-rst {
 			rockchip,pins = <0 RK_PC2 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+
+		gmac1_int: gmac1-int {
+			rockchip,pins = <0 RK_PC7 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
 
 		gmac1_rst: gmac1-rst {
